@@ -16,7 +16,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,18 +47,16 @@ public class MainActivity extends AppCompatActivity {
         userStatusCallable = createUserStatusCallable();
         messagesHandler.register(Topics.Wildcard.USER_STATUS, userStatusCallable);
 
-
         initUserListAdapter();
 
         client = MqttSingleton.getInstance();
         try {
-            client.subscribe(Topics.ONLINE_USERS);
-            client.subscribe(Topics.Wildcard.USER_STATUS);
-            client.publish(Topics.USER_STATUS_TOPIC, new MqttMessage(Topics.Content.ONLINE_STATUS));
+            client.connect();
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
+
 
     private CallableOnMessage createUserStatusCallable() {
         return new CallableOnMessage() {
@@ -117,18 +114,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     public void updateUserlist(final User newUser) {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (!newUser.getLogin().equals(Configuration.USERNAME)) {
-
                     if (isNewUser(newUser)) {
                         addNewUser(newUser);
                     } else {
                         updateUser(newUser);
                     }
-
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -136,12 +132,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addNewUser(User newUser) {
-        final String fromOtherUser = Topics.message(Configuration.USERNAME, newUser.getLogin());
-        final String toOtherUser = Topics.message(newUser.getLogin(), Configuration.USERNAME);
+        final String fromUser = Topics.message(Configuration.USERNAME, newUser.getLogin());
+        final String toUser = Topics.message(newUser.getLogin(), Configuration.USERNAME);
         userList.add(newUser);
         try {
-            client.subscribe(fromOtherUser);
-            client.subscribe(toOtherUser);
+            client.subscribe(fromUser);
+            client.subscribe(toUser);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -166,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu (Menu menu){
             getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -178,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch(id) {
             case R.id.action_refresh:
-                connectMqtt();
+                onRefresh();
                 return true;
             case R.id.action_settings:
                 Toast.makeText(this, "Not supported yet", Toast.LENGTH_SHORT).show();
@@ -189,20 +187,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void connectMqtt() {
+    private void onRefresh() {
         if(!client.isConnected()) {
             try {
                 client.connect();
-                client.subscribe(Topics.ONLINE_USERS);
-                client.subscribe(Topics.Wildcard.USER_STATUS);
-                client.publish(Topics.USER_STATUS_TOPIC, new MqttMessage(Topics.Content.ONLINE_STATUS));
-                client.publish(Topics.ONLINE_USERS, new MqttMessage("get".getBytes()));
             } catch (MqttException e) {
                 e.printStackTrace();
             }
         }
     }
-
 
 }
 

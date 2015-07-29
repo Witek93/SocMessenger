@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -22,11 +23,13 @@ public class MessagesActivity extends Activity implements CallableOnMessage {
     private ArrayAdapter adapter;
     private String toUser, fromUser;
     private String publishingTopic, subscribingTopic;
+    private MessageDatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages);
+
 
         Bundle bundle = getIntent().getExtras();
         fromUser = bundle.getString("other_user");
@@ -34,10 +37,12 @@ public class MessagesActivity extends Activity implements CallableOnMessage {
         publishingTopic = Topics.message(fromUser, toUser);
         subscribingTopic = Topics.message(toUser, fromUser);
 
+        dbHelper = MessageDatabaseHelper.getInstance(this);
+
         MessagesHandler messagesHandler = MessagesHandler.getInstance();
         messagesHandler.register(subscribingTopic, this);
 
-        messageList = new ArrayList<>();
+        messageList = new ArrayList<>(dbHelper.selectAll(fromUser, toUser));
 
         adapter = new MessageListAdapter(this, messageList);
         ListView messageListView = (ListView) findViewById(R.id.messageList);
@@ -45,12 +50,14 @@ public class MessagesActivity extends Activity implements CallableOnMessage {
     }
 
     @Override
-    synchronized public void call(String topic, final String message) {
+    synchronized public void call(String topic, final String content) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Message msg = new Message(message, fromUser, new Date());
-                messageList.add(msg);
+                Message message = new Message(content, fromUser, new Date());
+                long id = dbHelper.insert(message.getContent(), message.getWhen().getTime(), fromUser, toUser);
+                Toast.makeText(MessagesActivity.this, id + "", Toast.LENGTH_SHORT).show();
+                messageList.add(message);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -61,14 +68,16 @@ public class MessagesActivity extends Activity implements CallableOnMessage {
         String content = messageText.getText().toString();
         if(!content.isEmpty()) {
             Message message = new Message(content, Configuration.USERNAME, new Date());
+            long id = dbHelper.insert(message.getContent(), message.getWhen().getTime(), toUser, fromUser);
+            Toast.makeText(MessagesActivity.this, id + "", Toast.LENGTH_SHORT).show();
             messageList.add(message);
+            adapter.notifyDataSetChanged();
             try {
                 MqttSingleton.getInstance().publish(publishingTopic, content.getBytes(), Configuration.DEFAULT_QOS, false);
             } catch (MqttException e) {
                 e.printStackTrace();
             }
             messageText.setText("");
-            adapter.notifyDataSetChanged();
         }
 
     }

@@ -12,9 +12,7 @@ import java.util.List;
 
 import pl.comarch.soc.socmessenger.model.User;
 
-/**
- * Created by Comarch on 2015-07-24.
- */
+
 public class UsersListAdapter extends ArrayAdapter<User> {
 
     public UsersListAdapter(Context context, List<User> values) {
@@ -33,14 +31,13 @@ public class UsersListAdapter extends ArrayAdapter<User> {
         userNameTextView.setText(user.getName());
 
         TextView lastSeenTextView = (TextView) convertView.findViewById(R.id.lastSeenTextView);
-        String lastSeenText = (user.getLastSeen() != null ? user.getLastSeen().toString() : "");
-        lastSeenTextView.setText(lastSeenText);
 
         if(user.isOnline()) {
             lastSeenTextView.setVisibility(View.GONE);
             userNameTextView.setBackgroundResource(android.R.color.holo_green_light);
 
         } else {
+            lastSeenTextView.setText(user.getLastSeen().toString());
             lastSeenTextView.setVisibility(View.VISIBLE);
             userNameTextView.setBackgroundResource(android.R.color.background_light);
         }

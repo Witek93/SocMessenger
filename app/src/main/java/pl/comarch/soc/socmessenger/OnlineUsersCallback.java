@@ -33,18 +33,7 @@ public class OnlineUsersCallback implements MqttCallback {
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         String message = mqttMessage.toString();
         Log.i("MQTT", "message arrived: " + topic + ": " + mqttMessage.toString());
-
         messagesHandler.handle(topic, message);
-
-//        if(topic.equals(Topics.ONLINE_USERS)) {
-////            handleOnlineUsers(message);
-//            //TODO call updateOnlineUsers() from MainActivity
-//        } else if(topic.equals(Topics.Regex.USER_STATUS)) {
-//            //TODO get username and call updateOnlineUsers() from MainActivity
-//        } else if(topic.equals(Topics.Regex.MESSAGE)) {
-//            //TODO get publisher's and receiver's names and call updateMessage() from MessageActivity
-
-
     }
 
 }
