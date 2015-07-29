@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="2sp"
+    android:background="@android:color/holo_green_dark"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_green_dark"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/author"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5sp"
+            android:textSize="20sp"
+            android:text="Example"
+            android:textColor="@android:color/white"
+            />
+
+        <TextView
+            android:id="@+id/when"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:paddingRight="5sp"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:gravity="right"
+            android:text="Mon 15/07/2015"
+            android:textColor="@android:color/white"
+            />
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4sp"
+        android:text="Example content"
+        android:textSize="18sp"
+        android:background="@android:color/white"
+        android:textColor="@android:color/holo_green_dark"
+        />
+
+</LinearLayout>
