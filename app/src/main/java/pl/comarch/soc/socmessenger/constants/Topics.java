@@ -1,4 +1,4 @@
-package pl.comarch.soc.socmessenger;
+package pl.comarch.soc.socmessenger.constants;
 
 public class Topics {
 

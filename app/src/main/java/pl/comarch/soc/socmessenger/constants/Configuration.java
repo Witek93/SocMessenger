@@ -1,4 +1,4 @@
-package pl.comarch.soc.socmessenger;
+package pl.comarch.soc.socmessenger.constants;
 
 
 public class Configuration {
@@ -9,6 +9,4 @@ public class Configuration {
 //    public static final String USERNAME = "karol_galaxy_core";
 
     private Configuration() {}
-
-
 }

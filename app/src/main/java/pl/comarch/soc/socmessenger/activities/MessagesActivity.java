@@ -15,14 +15,14 @@ import java.util.Date;
 import java.util.List;
 
 import pl.comarch.soc.socmessenger.CallableOnMessage;
-import pl.comarch.soc.socmessenger.Configuration;
-import pl.comarch.soc.socmessenger.MessageDatabaseHelper;
+import pl.comarch.soc.socmessenger.constants.Configuration;
+import pl.comarch.soc.socmessenger.db.DBMessageHelper;
 import pl.comarch.soc.socmessenger.MessageListAdapter;
 import pl.comarch.soc.socmessenger.MessagesHandler;
 import pl.comarch.soc.socmessenger.R;
-import pl.comarch.soc.socmessenger.Topics;
+import pl.comarch.soc.socmessenger.constants.Topics;
 import pl.comarch.soc.socmessenger.model.Message;
-import pl.comarch.soc.socmessenger.singletons.MqttConnectionHandler;
+import pl.comarch.soc.socmessenger.singletons.MqttConnector;
 
 
 public class MessagesActivity extends Activity implements CallableOnMessage {
@@ -31,13 +31,12 @@ public class MessagesActivity extends Activity implements CallableOnMessage {
     private ArrayAdapter adapter;
     private String toUser, fromUser;
     private String publishingTopic, subscribingTopic;
-    private MessageDatabaseHelper dbHelper;
+    private DBMessageHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages);
-
 
         Bundle bundle = getIntent().getExtras();
         fromUser = bundle.getString("other_user");
@@ -45,7 +44,7 @@ public class MessagesActivity extends Activity implements CallableOnMessage {
         publishingTopic = Topics.message(fromUser, toUser);
         subscribingTopic = Topics.message(toUser, fromUser);
 
-        dbHelper = new MessageDatabaseHelper(this);
+        dbHelper = new DBMessageHelper(this);
 
         MessagesHandler messagesHandler = MessagesHandler.getInstance();
         messagesHandler.register(subscribingTopic, this);
@@ -80,7 +79,7 @@ public class MessagesActivity extends Activity implements CallableOnMessage {
             messageList.add(message);
             adapter.notifyDataSetChanged();
             try {
-                MqttConnectionHandler.getInstance().publish(publishingTopic, content.getBytes(), Configuration.DEFAULT_QOS, false);
+                MqttConnector.getInstance().publish(publishingTopic, content.getBytes(), Configuration.DEFAULT_QOS, false);
             } catch (MqttException e) {
                 e.printStackTrace();
             }

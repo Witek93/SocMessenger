@@ -6,25 +6,26 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import pl.comarch.soc.socmessenger.Configuration;
-import pl.comarch.soc.socmessenger.OnlineUsersCallback;
-import pl.comarch.soc.socmessenger.Topics;
+import pl.comarch.soc.socmessenger.constants.Configuration;
+import pl.comarch.soc.socmessenger.MessagesHandler;
+import pl.comarch.soc.socmessenger.constants.Topics;
 
 
-public class MqttConnectionHandler extends MqttClient {
+public class MqttConnector extends MqttClient {
 
-    private static MqttConnectionHandler instance;
+    private static MqttConnector instance;
     private static MqttConnectOptions options;
 
 
-    private MqttConnectionHandler() throws MqttException {
+    private MqttConnector() throws MqttException {
         super(Configuration.SERVER_URI, Configuration.USERNAME, null);
     }
 
-    public synchronized static MqttConnectionHandler getInstance() {
+
+    public synchronized static MqttConnector getInstance() {
         if(instance == null) {
             try {
-                instance = new MqttConnectionHandler();
+                instance = new MqttConnector();
 
                 options = new MqttConnectOptions();
                 options.setWill(Topics.USER_STATUS_TOPIC, Topics.Content.OFFLINE_STATUS, Configuration.DEFAULT_QOS, false);
@@ -37,14 +38,16 @@ public class MqttConnectionHandler extends MqttClient {
         return instance;
     }
 
+
     @Override
     public void connect() throws MqttException {
         if(!this.isConnected()) {
             super.connect(options);
-            instance.setCallback(new OnlineUsersCallback());
+            instance.setCallback(MessagesHandler.getInstance());
             instance.onValidConnection();
         }
     }
+
 
     private void onValidConnection() {
         try {

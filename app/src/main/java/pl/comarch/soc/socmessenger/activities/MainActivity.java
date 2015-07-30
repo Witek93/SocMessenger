@@ -24,11 +24,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import pl.comarch.soc.socmessenger.CallableOnMessage;
-import pl.comarch.soc.socmessenger.Configuration;
+import pl.comarch.soc.socmessenger.constants.Configuration;
 import pl.comarch.soc.socmessenger.MessagesHandler;
-import pl.comarch.soc.socmessenger.singletons.MqttConnectionHandler;
+import pl.comarch.soc.socmessenger.singletons.MqttConnector;
 import pl.comarch.soc.socmessenger.R;
-import pl.comarch.soc.socmessenger.Topics;
+import pl.comarch.soc.socmessenger.constants.Topics;
 import pl.comarch.soc.socmessenger.UsersListAdapter;
 import pl.comarch.soc.socmessenger.model.User;
 
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayAdapter adapter;
     static private List<User> userList = new ArrayList<>();
-    private MqttConnectionHandler client;
+    private MqttConnector client;
     private MessagesHandler messagesHandler;
 
 
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         initUserListAdapter();
 
-        client = MqttConnectionHandler.getInstance();
+        client = MqttConnector.getInstance();
         try {
             client.connect();
         } catch (MqttException e) {
