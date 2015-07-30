@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import pl.comarch.soc.socmessenger.CallableOnMessage;
+import pl.comarch.soc.socmessenger.messageHandling.CallableOnMessage;
 import pl.comarch.soc.socmessenger.constants.Configuration;
 import pl.comarch.soc.socmessenger.db.DBMessageHelper;
 import pl.comarch.soc.socmessenger.MessageListAdapter;
-import pl.comarch.soc.socmessenger.MessagesHandler;
+import pl.comarch.soc.socmessenger.messageHandling.MessagesHandler;
 import pl.comarch.soc.socmessenger.R;
 import pl.comarch.soc.socmessenger.constants.Topics;
 import pl.comarch.soc.socmessenger.model.Message;

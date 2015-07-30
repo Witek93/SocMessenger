@@ -1,4 +1,4 @@
-package pl.comarch.soc.socmessenger;
+package pl.comarch.soc.socmessenger.messageHandling;
 
 import android.util.Log;
 

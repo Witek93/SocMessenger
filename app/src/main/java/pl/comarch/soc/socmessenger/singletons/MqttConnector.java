@@ -7,7 +7,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import pl.comarch.soc.socmessenger.constants.Configuration;
-import pl.comarch.soc.socmessenger.MessagesHandler;
+import pl.comarch.soc.socmessenger.messageHandling.MessagesHandler;
 import pl.comarch.soc.socmessenger.constants.Topics;
 
 

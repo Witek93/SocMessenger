@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import pl.comarch.soc.socmessenger.CallableOnMessage;
+import pl.comarch.soc.socmessenger.messageHandling.CallableOnMessage;
 import pl.comarch.soc.socmessenger.constants.Configuration;
-import pl.comarch.soc.socmessenger.MessagesHandler;
+import pl.comarch.soc.socmessenger.messageHandling.MessagesHandler;
 import pl.comarch.soc.socmessenger.singletons.MqttConnector;
 import pl.comarch.soc.socmessenger.R;
 import pl.comarch.soc.socmessenger.constants.Topics;
