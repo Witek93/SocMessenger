@@ -16,7 +16,6 @@ public class Topics {
 
     public static class Regex {
         public static final String USER_STATUS = Parts.USERS + "/(\\w+)/status";
-        public static final String MESSAGE = ""; //TODO: create regex
     }
 
     public static class Content {

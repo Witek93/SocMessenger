@@ -5,9 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Comparator;
 import java.util.Date;
 
-/**
- * Created by Comarch on 2015-07-24.
- */
+
 public class User {
     private String login;
     private String name;
@@ -15,11 +13,7 @@ public class User {
     private Date lastSeen;
     private boolean online;
 
-    public User() {
-        this.login = this.name = "Yeti";
-        this.lastSeen = new Date(System.currentTimeMillis());
-        this.online = false;
-    }
+    public User() {}
 
     public User(Date lastSeen, String name, boolean online) {
         this.login = this.name = name;

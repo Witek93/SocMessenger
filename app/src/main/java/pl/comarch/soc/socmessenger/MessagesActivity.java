@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import pl.comarch.soc.socmessenger.model.Message;
+import pl.comarch.soc.socmessenger.singletons.MqttConnectionHandler;
 
 
 public class MessagesActivity extends Activity implements CallableOnMessage {
@@ -37,13 +38,12 @@ public class MessagesActivity extends Activity implements CallableOnMessage {
         publishingTopic = Topics.message(fromUser, toUser);
         subscribingTopic = Topics.message(toUser, fromUser);
 
-        dbHelper = MessageDatabaseHelper.getInstance(this);
+        dbHelper = new MessageDatabaseHelper(this);
 
         MessagesHandler messagesHandler = MessagesHandler.getInstance();
         messagesHandler.register(subscribingTopic, this);
 
         messageList = new ArrayList<>(dbHelper.selectAll(fromUser, toUser));
-
         adapter = new MessageListAdapter(this, messageList);
         ListView messageListView = (ListView) findViewById(R.id.messageList);
         messageListView.setAdapter(adapter);
@@ -73,7 +73,7 @@ public class MessagesActivity extends Activity implements CallableOnMessage {
             messageList.add(message);
             adapter.notifyDataSetChanged();
             try {
-                MqttSingleton.getInstance().publish(publishingTopic, content.getBytes(), Configuration.DEFAULT_QOS, false);
+                MqttConnectionHandler.getInstance().publish(publishingTopic, content.getBytes(), Configuration.DEFAULT_QOS, false);
             } catch (MqttException e) {
                 e.printStackTrace();
             }

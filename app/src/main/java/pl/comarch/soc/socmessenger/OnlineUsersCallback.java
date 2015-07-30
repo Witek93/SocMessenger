@@ -9,12 +9,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 
 public class OnlineUsersCallback implements MqttCallback {
-    MessagesHandler messagesHandler;
-
-    public OnlineUsersCallback() {
-        super();
-        this.messagesHandler = MessagesHandler.getInstance();
-    }
 
     @Override
     public void connectionLost(Throwable throwable) {
@@ -33,7 +27,7 @@ public class OnlineUsersCallback implements MqttCallback {
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
         String message = mqttMessage.toString();
         Log.i("MQTT", "message arrived: " + topic + ": " + mqttMessage.toString());
-        messagesHandler.handle(topic, message);
+        MessagesHandler.getInstance().handle(topic, message);
     }
 
 }

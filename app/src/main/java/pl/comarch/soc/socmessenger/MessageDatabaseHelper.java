@@ -19,19 +19,10 @@ public class MessageDatabaseHelper {
     private static final int DB_VERSION = 2;
 
     private DbHelper helper;
-    private static MessageDatabaseHelper instance;
 
-    private MessageDatabaseHelper(Context context) {
+    public MessageDatabaseHelper(Context context) {
         helper = new DbHelper(context);
     }
-
-    synchronized static public MessageDatabaseHelper getInstance(Context context) {
-        if(instance == null) {
-            instance = new MessageDatabaseHelper(context);
-        }
-        return instance;
-    }
-
 
     public long insert(String content, long currentMillis, String from, String to) {
         ContentValues values = new ContentValues();
@@ -50,8 +41,9 @@ public class MessageDatabaseHelper {
                 "userTo=\'" + from + "\' AND userFrom=\'" + to + "\'";
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
+
+        List<Message> messages = new LinkedList<>();
         if(cursor.moveToFirst()) {
-            List<Message> messages = new LinkedList<>();
             do {
                 String author = cursor.getString(cursor.getColumnIndex("userFrom"));
                 String content = cursor.getString(cursor.getColumnIndex("content"));
@@ -59,9 +51,8 @@ public class MessageDatabaseHelper {
                 Message message = new Message(content, author, new Date(date));
                 messages.add(message);
             } while(cursor.moveToNext());
-            return messages;
         }
-        return null;
+        return messages;
     }
 
 

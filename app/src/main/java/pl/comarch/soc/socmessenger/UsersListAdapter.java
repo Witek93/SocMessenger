@@ -35,13 +35,11 @@ public class UsersListAdapter extends ArrayAdapter<User> {
         if(user.isOnline()) {
             lastSeenTextView.setVisibility(View.GONE);
             userNameTextView.setBackgroundResource(android.R.color.holo_green_light);
-
         } else {
             lastSeenTextView.setText(user.getLastSeen().toString());
             lastSeenTextView.setVisibility(View.VISIBLE);
             userNameTextView.setBackgroundResource(android.R.color.background_light);
         }
-
         return convertView;
     }
 
