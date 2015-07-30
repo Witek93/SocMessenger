@@ -1,4 +1,4 @@
-package pl.comarch.soc.socmessenger;
+package pl.comarch.soc.socmessenger.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,15 +13,12 @@ import java.util.List;
 import pl.comarch.soc.socmessenger.model.Message;
 
 
-public class MessageDatabaseHelper {
-
-    private static final String DB_NAME = "messages";
-    private static final int DB_VERSION = 2;
+public class DBMessageHelper {
 
     private DbHelper helper;
 
 
-    public MessageDatabaseHelper(Context context) {
+    public DBMessageHelper(Context context) {
         helper = new DbHelper(context);
     }
 
@@ -33,12 +30,12 @@ public class MessageDatabaseHelper {
         values.put(DbHelper.COL_USERFROM, from);
         values.put(DbHelper.COL_USERTO, to);
         SQLiteDatabase db = helper.getWritableDatabase();
-        return db.insert(DB_NAME, null, values);
+        return db.insert(DbHelper.DB_NAME, null, values);
     }
 
 
     public List<Message> selectAll(String to, String from) {
-        String sql = "SELECT * FROM " + DB_NAME + " WHERE " +
+        String sql = "SELECT * FROM " + DbHelper.DB_NAME + " WHERE " +
                 "(" + DbHelper.COL_USERTO   + "=\'" + to   + "\' AND " +
                       DbHelper.COL_USERFROM + "=\'" + from + "\') " +
                 " OR " +
@@ -64,6 +61,8 @@ public class MessageDatabaseHelper {
 
     public static class DbHelper extends SQLiteOpenHelper {
 
+        private static final int DB_VERSION = 2;
+        private static final String DB_NAME = "messages";
         private static final String COL_ID = "id";
         private static final String COL_USERFROM = "userFrom";
         private static final String COL_USERTO = "userTo";
