@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MessagesActivity"
+            android:name=".activities.MessagesActivity"
             android:label="@string/title_activity_messages" >
         </activity>
     </application>

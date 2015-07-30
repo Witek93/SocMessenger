@@ -1,4 +1,4 @@
-package pl.comarch.soc.socmessenger;
+package pl.comarch.soc.socmessenger.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,6 +14,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import pl.comarch.soc.socmessenger.CallableOnMessage;
+import pl.comarch.soc.socmessenger.Configuration;
+import pl.comarch.soc.socmessenger.MessageDatabaseHelper;
+import pl.comarch.soc.socmessenger.MessageListAdapter;
+import pl.comarch.soc.socmessenger.MessagesHandler;
+import pl.comarch.soc.socmessenger.R;
+import pl.comarch.soc.socmessenger.Topics;
 import pl.comarch.soc.socmessenger.model.Message;
 import pl.comarch.soc.socmessenger.singletons.MqttConnectionHandler;
 
