@@ -18,7 +18,7 @@ public class MqttConnector extends MqttClient {
 
 
     private MqttConnector() throws MqttException {
-        super(Configuration.SERVER_URI, Configuration.USERNAME, null);
+        super(Configuration.MQTT_BROKER_URI, Configuration.USERNAME, null);
     }
 
 

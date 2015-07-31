@@ -23,10 +23,10 @@ public class DBMessageHelper {
     }
 
 
-    public long insert(String content, long currentMillis, String from, String to) {
+    public long insert(String content, long currentTimeInMillis, String from, String to) {
         ContentValues values = new ContentValues();
         values.put(DbHelper.COL_CONTENT, content);
-        values.put(DbHelper.COL_DATE, currentMillis);
+        values.put(DbHelper.COL_DATE, currentTimeInMillis);
         values.put(DbHelper.COL_USERFROM, from);
         values.put(DbHelper.COL_USERTO, to);
         SQLiteDatabase db = helper.getWritableDatabase();

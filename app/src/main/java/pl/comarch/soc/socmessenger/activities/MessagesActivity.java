@@ -27,7 +27,7 @@ import pl.comarch.soc.socmessenger.singletons.MqttConnector;
 
 public class MessagesActivity extends Activity implements CallableOnMessage {
 
-    private List<Message> messageList;
+    private List<Message> messagesList;
     private ArrayAdapter adapter;
     private String toUser, fromUser;
     private String publishingTopic, subscribingTopic;
@@ -49,8 +49,8 @@ public class MessagesActivity extends Activity implements CallableOnMessage {
         MessagesHandler messagesHandler = MessagesHandler.getInstance();
         messagesHandler.register(subscribingTopic, this);
 
-        messageList = new ArrayList<>(dbHelper.selectAll(fromUser, toUser));
-        adapter = new MessageListAdapter(this, messageList);
+        messagesList = new ArrayList<>(dbHelper.selectAll(fromUser, toUser));
+        adapter = new MessageListAdapter(this, messagesList);
         ListView messageListView = (ListView) findViewById(R.id.messageList);
         messageListView.setAdapter(adapter);
     }
@@ -63,7 +63,7 @@ public class MessagesActivity extends Activity implements CallableOnMessage {
                 Message message = new Message(content, fromUser, new Date());
                 long id = dbHelper.insert(message.getContent(), message.getWhen().getTime(), fromUser, toUser);
                 Toast.makeText(MessagesActivity.this, id + "", Toast.LENGTH_SHORT).show();
-                messageList.add(message);
+                messagesList.add(message);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -73,18 +73,25 @@ public class MessagesActivity extends Activity implements CallableOnMessage {
         TextView messageText = (TextView) findViewById(R.id.messageText);
         String content = messageText.getText().toString();
         if(!content.isEmpty()) {
-            Message message = new Message(content, Configuration.USERNAME, new Date());
-            long id = dbHelper.insert(message.getContent(), message.getWhen().getTime(), toUser, fromUser);
-            Toast.makeText(MessagesActivity.this, id + "", Toast.LENGTH_SHORT).show();
-            messageList.add(message);
-            adapter.notifyDataSetChanged();
-            try {
-                MqttConnector.getInstance().publish(publishingTopic, content.getBytes(), Configuration.DEFAULT_QOS, false);
-            } catch (MqttException e) {
-                e.printStackTrace();
-            }
+            addMessage(content);
+            publishMessage(content);
             messageText.setText("");
         }
 
+    }
+
+    private void publishMessage(String content) {
+        try {
+            MqttConnector.getInstance().publish(publishingTopic, content.getBytes(), Configuration.DEFAULT_QOS, false);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addMessage(String content) {
+        Message message = new Message(content, Configuration.USERNAME, new Date());
+        dbHelper.insert(message.getContent(), message.getWhen().getTime(), toUser, fromUser);
+        messagesList.add(message);
+        adapter.notifyDataSetChanged();
     }
 }

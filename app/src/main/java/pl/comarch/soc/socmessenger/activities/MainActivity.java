@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter adapter;
     static private List<User> userList = new ArrayList<>();
     private MqttConnector client;
-    private MessagesHandler messagesHandler;
 
 
     @Override
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        messagesHandler = MessagesHandler.getInstance();
+        MessagesHandler messagesHandler = MessagesHandler.getInstance();
 
         CallableOnMessage usersOnlineCallable = createUsersOnlineCallable();
         messagesHandler.register(Topics.ONLINE_USERS, usersOnlineCallable);

@@ -12,9 +12,7 @@ import java.util.List;
 
 import pl.comarch.soc.socmessenger.model.Message;
 
-/**
- * Created by Comarch on 2015-07-24.
- */
+
 public class MessageListAdapter extends ArrayAdapter<Message> {
 
     public MessageListAdapter(Context context, List<Message> values) {
